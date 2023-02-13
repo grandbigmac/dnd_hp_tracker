@@ -47,21 +47,31 @@ class _CreateLobbyState extends State<CreateLobby> with SingleTickerProviderStat
             const SizedBox(height: 12.0),
             Text('Encounter Description', style: widgetContent,),
             Container(
-              color: widgetBackgroundRed.withAlpha(100),
               child: TextField(
-                maxLines: 5,
-                scrollPadding: const EdgeInsets.only(bottom:40),
-                style: widgetContent,
                 controller: encounterDescription,
-                decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.white, width: 10),
-                    )
-                ),
+                style: widgetContent,
+                keyboardType: TextInputType.multiline,
+                minLines: 1,//Normal textInputField will be displayed
+                maxLines: 5,// when user presses enter it will adapt to it
               ),
             ),
           ],
         ),
+      );
+    }
+
+    Widget chooseIcon() {
+      return Container(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Select an icon for your encounter:', style: widgetContent,),
+            const SizedBox(height: 12.0),
+            Center(
+              child: Icon(Icons.account_circle_rounded),
+            )
+          ],
+        )
       );
     }
 
@@ -78,7 +88,24 @@ class _CreateLobbyState extends State<CreateLobby> with SingleTickerProviderStat
           shrinkWrap: true,
           children: [
             blockContainer(context, 'Create Lobby', 'To create a new lobby for your combat encounter, please enter the following details:', redBlockContainer),
-            blockContainerCustomContent(context, registerContent(), redBlockContainer)
+            const SizedBox(height: 12.0),
+            blockContainerCustomContent(context, registerContent(), redBlockContainer),
+            const SizedBox(height: 12.0),
+            blockContainerCustomContent(context, chooseIcon(), redBlockContainer),
+            const SizedBox(height: 12.0),
+            Row(
+              children: [
+                Flexible(
+                  flex: 1,
+                  child: blockContainerCustomContent(context, Container(), redBlockContainer),
+                ),
+                const SizedBox(width: 12.0),
+                Flexible(
+                  flex: 1,
+                  child: blockContainerCustomContent(context, Container(), redBlockContainer),
+                )
+              ],
+            )
           ],
         ),
       ),

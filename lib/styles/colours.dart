@@ -12,6 +12,6 @@ LinearGradient redBlockContainer = LinearGradient(
     end: Alignment.topRight,
     colors: [
       widgetBackgroundRed,
-      widgetBackgroundRed.withAlpha(100),
+      widgetBackgroundRed.withAlpha(125),
     ]
 );
