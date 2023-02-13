@@ -40,6 +40,7 @@ dependencies:
   page_transition: ^2.0.9
   cloud_firestore: ^4.3.2
   firebase_core: ^2.5.0
+  hive: ^2.2.3
 
 dev_dependencies:
   flutter_test:
@@ -62,6 +63,22 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+  assets:
+    - assets/images/characters/artificer.PNG
+    - assets/images/characters/barbarian.PNG
+    - assets/images/characters/bard.PNG
+    - assets/images/characters/bloodhunter.PNG
+    - assets/images/characters/cleric.PNG
+    - assets/images/characters/druid.PNG
+    - assets/images/characters/fighter.PNG
+    - assets/images/characters/monk.PNG
+    - assets/images/characters/paladin.PNG
+    - assets/images/characters/ranger.PNG
+    - assets/images/characters/rogue.PNG
+    - assets/images/characters/sorcerer.PNG
+    - assets/images/characters/warlock.PNG
+    - assets/images/characters/wizard.PNG
+    - assets/images/default.PNG
 
   # To add assets to your application, add an assets section, like this:
   # assets:

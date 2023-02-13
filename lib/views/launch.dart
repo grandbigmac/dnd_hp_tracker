@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'dart:math' as m;
+import 'package:dnd_hp_tracker/views/create_character.dart';
 import 'package:dnd_hp_tracker/views/create_lobby.dart';
 import 'package:dnd_hp_tracker/views/lobby_list.dart';
 import 'package:dnd_hp_tracker/widgets/containers.dart';
@@ -80,7 +81,14 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
             const SizedBox(height: 12.0),
             GestureDetector(
               onTap: () {
-
+                Navigator.push(
+                  context,
+                  PageTransition(
+                    type: PageTransitionType.leftToRightWithFade,
+                    alignment: Alignment.topCenter,
+                    child: CreateCharacter(),
+                  ),
+                );
               },
               child: blockContainer(context, 'Create a Character', 'Set your character\'s name and HP to use in combat lobbies!', redBlockContainer),
             ),
