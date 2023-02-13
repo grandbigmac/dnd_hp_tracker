@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "199211922778",
+    "project_id": "dnd-hp-tracker",
+    "storage_bucket": "dnd-hp-tracker.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:199211922778:android:93728b9b55b56048982f63",
+        "android_client_info": {
+          "package_name": "harry.tools.dndhp.dnd_hp_tracker"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "199211922778-54vt9gdgskrmtaovh0di907i4vdtc1im.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAqQDgB5WNI_AGWCBXZxcU1BvcJ7XSrUAE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "199211922778-54vt9gdgskrmtaovh0di907i4vdtc1im.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
