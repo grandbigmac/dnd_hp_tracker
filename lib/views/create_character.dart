@@ -73,64 +73,74 @@ class _CreateCharacterState extends State<CreateCharacter> with TickerProviderSt
   }
 
   void showIconSelection() {
-    List<Padding> rows = [];
-    //If list % 3 is not 0, add remainder number of empty icons to list
 
-    int count = 0;
-    List<Widget> items = [];
-    for (int i = 0; i < characterIcons.length; i++) {
-      bool sel = i == widget.iconIndex;
-      items.add(GestureDetector(
-        onTap: () {
-          log(i.toString());
-          setState(() {
-            widget.iconIndex = i;
-          });
-        },
-        child: getIconContainer(i, false, sel))
-      );
-      count++;
-      if (count == 3) {
-        rows.add(Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: items,
-          ),
-        ));
-        items = [];
-        count = 0;
-      }
-    }
-
-    ListView mainGrid = ListView(
-      children: rows,
-    );
 
     showModalBottomSheet<void>(context: context, builder: (BuildContext context) {
-      return Container(
-          color: widgetBackgroundRed,
-          child: Padding(
-              padding: const EdgeInsets.all(0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Container(height: MediaQuery.of(context).size.height * 0.45, child: mainGrid),
-                  Container(
-                    child: Padding(
-                      padding: const EdgeInsets.all(12.0),
-                      child: Center(
-                        child: Text(
-                          'Select a new character icon.',
-                          style: widgetContent,
+      return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setModalState) {
+
+            List<Padding> rows = [];
+            //If list % 3 is not 0, add remainder number of empty icons to list
+
+            int count = 0;
+            List<Widget> items = [];
+            for (int i = 0; i < characterIcons.length; i++) {
+              bool sel = i == widget.iconIndex;
+              items.add(GestureDetector(
+                  onTap: () {
+                    log(i.toString());
+                    setModalState(() {
+                      widget.iconIndex = i;
+                    });
+                    setState(() {
+                      widget.iconIndex = i;
+                    });
+                  },
+                  child: getIconContainer(i, false, sel))
+              );
+              count++;
+              if (count == 3) {
+                rows.add(Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: items,
+                  ),
+                ));
+                items = [];
+                count = 0;
+              }
+            }
+
+            ListView mainGrid = ListView(
+              children: rows,
+            );
+
+            return Container(
+              color: widgetBackgroundRed,
+              child: Padding(
+                padding: const EdgeInsets.all(0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Container(height: MediaQuery.of(context).size.height * 0.45, child: mainGrid),
+                    Container(
+                      child: Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: Center(
+                          child: Text(
+                            'Select a new character icon.',
+                            style: widgetContent,
+                          ),
                         ),
                       ),
-                    ),
-                  )
-                ],
+                    )
+                  ],
+                ),
               ),
-          ),
+            );
+          }
       );
     });
   }
