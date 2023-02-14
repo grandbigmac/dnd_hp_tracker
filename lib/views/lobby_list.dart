@@ -196,7 +196,7 @@ class _LobbyListState extends State<LobbyList> with SingleTickerProviderStateMix
                 child: InkWell(
                   onTap: () {
                     //Go to this lobby
-                    lobbyIdController.clear();
+                    lobbyIdController.text = '000';
                     joinLobbyModal(doc);
                   },
                   child: Icon(

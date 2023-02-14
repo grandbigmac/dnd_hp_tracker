@@ -30,6 +30,10 @@ Future<void> disposeLobby(BuildContext context) async {
   var id = await getDeviceId();
   try {
     await FirebaseFirestore.instance.collection('lobbies').doc(id).delete();
+    var query = await FirebaseFirestore.instance.collection('characters').where('lobbyID', isEqualTo: id).get();
+    for (var i in query.docs) {
+      await i.reference.delete();
+    }
   }
   catch (e) {
     log('Failed to delete lobby');
