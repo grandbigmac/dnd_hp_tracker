@@ -105,3 +105,28 @@ Container getHomePageCharacterIcon(int index, bool selected) {
     ),
   );
 }
+
+Container getIconContainerSmall(int index, bool selected, List<dynamic> list) {
+  if (index == -1) {
+    return Container();
+  }
+  return Container(
+    height: 50, width: 50,
+    decoration: BoxDecoration(
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black38,
+            spreadRadius: 5,
+            blurRadius: 9,
+            offset: const Offset(0, 3),
+          )
+        ],
+        border: Border.all(color: selected? Colors.orange : widgetBackgroundRed, width: 1.0),
+        borderRadius: BorderRadius.circular(125),
+        image: DecorationImage(
+          image: list[index],
+          fit: BoxFit.cover,
+        )
+    ),
+  );
+}

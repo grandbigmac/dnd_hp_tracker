@@ -25,6 +25,9 @@ class LobbyPage extends StatefulWidget {
 
 class _LobbyPageState extends State<LobbyPage> with SingleTickerProviderStateMixin {
   bool option = false;
+  Duration animDur = const Duration(milliseconds: 500);
+  int selIndex = 0;
+  int characterTotal = 0;
 
   @override
   void initState() {
@@ -38,6 +41,161 @@ class _LobbyPageState extends State<LobbyPage> with SingleTickerProviderStateMix
 
   @override
   Widget build(BuildContext context) {
+
+    Widget lobbyCard(DocumentSnapshot doc, int index) {
+
+      return Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Container(
+          width: MediaQuery.of(context).size.width,
+          padding: const EdgeInsets.all(24.0),
+          decoration: BoxDecoration(
+              borderRadius: const BorderRadius.all(Radius.circular(24.0)),
+              color: index == selIndex ? widgetBackgroundRedDark : widgetBackgroundRed,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.5),
+                  spreadRadius: 5,
+                  blurRadius: 9,
+                  offset: const Offset(0, 3),
+                )
+              ]
+          ),
+          child: Row(
+              //crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                getIconContainerSmall(doc['iconIndex'], index == selIndex ? true : false, characterIcons),
+                const SizedBox(width: 12.0,),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(doc['name'], style: widgetContent,),
+                    Text(doc['charClass'], style: widgetContent),
+                  ],
+                ),
+                const SizedBox(width: 12.0,),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Icon(Icons.bolt, color: widgetTextColour,),
+                    Text(doc['initiative'].toString(), style: widgetContent,),
+                  ],
+                )
+              ]
+          ),
+        ),
+      );
+    }
+
+    Widget initiativeStream() {
+
+      return Container(
+        height: MediaQuery.of(context).size.height * 0.3,
+        width: double.infinity,
+        child: StreamBuilder(
+          stream: FirebaseFirestore.instance.collection('characters').where('lobbyID', isEqualTo: widget.lobby.id).orderBy('initiative', descending: true).snapshots(),
+          builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+            if (!snapshot.hasData) {
+              return blockContainer(context, 'No lobbies found!', '', redBlockContainer);
+            }
+            else {
+              return ListView.builder(
+                  shrinkWrap: true,
+                  physics: AlwaysScrollableScrollPhysics(),
+                  itemCount: snapshot.data.docs.length + 1,
+                  itemBuilder: (context, index) {
+                    //Add a blank space underneath the last card so it's not cut off
+                    //itemCount is increased for this
+                    characterTotal = snapshot.data.docs.length;
+                    if (index == snapshot.data.docs.length) {
+                      return SizedBox(height: MediaQuery.of(context).size.height * 0.2);
+                    }
+                    log(index.toString());
+                    DocumentSnapshot ds = snapshot.data.docs[index];
+                    return lobbyCard(ds, index);
+                  }
+              );
+            }
+          },
+        ),
+      );
+    }
+
+    Widget initiativeTracker() {
+      return IgnorePointer(
+        ignoring: option? true : false,
+        child: initiativeStream(),
+      );
+    }
+
+    Widget healthTracker() {
+      return IgnorePointer(
+        ignoring: option? false : true,
+        child: Container(
+            height: MediaQuery.of(context).size.height * 0.3,
+            child: Text('This is the health tracker', style: widgetTitle,)
+        ),
+      );
+    }
+
+    Widget pageContent() {
+      return Stack(
+        children: [
+          AnimatedOpacity(
+              duration: animDur, opacity: option? 0.0 : 1.0,
+              child: initiativeTracker()
+          ),
+          AnimatedOpacity(
+              duration: animDur, opacity: option? 1.0 : 0.0,
+              child: blockContainerCustomContent(context, healthTracker(), redBlockContainer)),
+        ],
+      );
+    }
+
+    Widget hostTools() {
+      return Container(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            InkWell(
+              onTap: () {
+                //Show modal menu to add a new monster to the initiative tracker
+              },
+              child: Icon(Icons.add, color: widgetTextColour, size: 25,),
+            ),
+            const SizedBox(width: 12.0,),
+            InkWell(
+              onTap: () {
+                //Show modal menu displaying all users currently connected
+              },
+              child: Icon(Icons.person, color: widgetTextColour, size: 25,),
+            ),
+            const SizedBox(width: 12.0,),
+            InkWell(
+              onTap: () {
+
+              },
+              child: Icon(Icons.bolt, color: widgetTextColour, size: 25,),
+            ),
+            const SizedBox(width: 12.0,),
+            InkWell(
+              onTap: () {
+                setState(() {
+                  if (selIndex == characterTotal) {
+                    selIndex = 0;
+                  }
+                  else {
+                    selIndex++;
+                  }
+                });
+              },
+              child: Icon(Icons.next_plan_outlined, color: widgetTextColour, size: 25,),
+            ),
+          ],
+        ),
+      );
+    }
 
     Widget lobbyDetails() {
       return Container(
@@ -95,7 +253,7 @@ class _LobbyPageState extends State<LobbyPage> with SingleTickerProviderStateMix
       );
     }
 
-    Widget hostTools() {
+    Widget menuSelector() {
       if (widget.lobby.id != widget.id) {
         return Container();
       }
@@ -152,11 +310,14 @@ class _LobbyPageState extends State<LobbyPage> with SingleTickerProviderStateMix
       body: Padding(
         padding: const EdgeInsets.all(12.0),
         child: ListView(
-          physics: NeverScrollableScrollPhysics(),
+          //physics: NeverScrollableScrollPhysics(),
           shrinkWrap: true,
           children: [
             lobbyDetails(),
-            hostTools(),
+            menuSelector(),
+            pageContent(),
+            const SizedBox(height: 12.0,),
+            blockContainerCustomContent(context, hostTools(), redBlockContainer),
           ],
         ),
       ),

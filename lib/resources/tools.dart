@@ -41,3 +41,8 @@ Future<String?> getDeviceId() async {
     return androidDeviceInfo.id; // unique ID on Android
   }
 }
+
+int rollD20(int mod) {
+  var rng = m.Random();
+  return rng.nextInt(20) + 1 + mod;
+}
