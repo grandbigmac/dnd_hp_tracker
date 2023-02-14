@@ -4,6 +4,7 @@ class Lobby {
   int iconIndex;
   int code;
   String id;
+  List<String> characters;
 
   Lobby({
     required this.name,
@@ -11,5 +12,6 @@ class Lobby {
     required this.iconIndex,
     required this.code,
     required this.id,
+    required this.characters,
   });
 }

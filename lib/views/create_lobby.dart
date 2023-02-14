@@ -216,6 +216,7 @@ class _CreateLobbyState extends State<CreateLobby> with TickerProviderStateMixin
                             iconIndex: widget.iconIndex,
                             code: widget.lobbyID,
                             id: id!,
+                            characters: []
                         );
                         bool result = await postLobby(context, lobby);
 

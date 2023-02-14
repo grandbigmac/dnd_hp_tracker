@@ -13,6 +13,7 @@ Future<bool> postLobby(BuildContext context, Lobby lobby) async {
     'description': lobby.description,
     'iconIndex': lobby.iconIndex,
     'code': lobby.code,
+    'characters': [],
   };
 
   try {

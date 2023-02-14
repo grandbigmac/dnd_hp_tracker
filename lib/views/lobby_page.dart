@@ -155,6 +155,22 @@ class _LobbyPageState extends State<LobbyPage> with SingleTickerProviderStateMix
 
     Widget hostTools() {
       return Container(
+        margin: const EdgeInsets.all(12.0),
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height * 0.1,
+        padding: const EdgeInsets.all(24.0),
+        decoration: BoxDecoration(
+            borderRadius: const BorderRadius.all(Radius.circular(24.0)),
+            gradient: redBlockContainer,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.5),
+                spreadRadius: 5,
+                blurRadius: 9,
+                offset: const Offset(0, 3),
+              )
+            ]
+        ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
@@ -191,6 +207,65 @@ class _LobbyPageState extends State<LobbyPage> with SingleTickerProviderStateMix
                 });
               },
               child: Icon(Icons.next_plan_outlined, color: widgetTextColour, size: 25,),
+            ),
+          ],
+        ),
+      );
+    }
+
+    Widget detailsExpansionTile() {
+      return Container(
+        width: MediaQuery.of(context).size.width,
+        padding: const EdgeInsets.all(12.0),
+        decoration: BoxDecoration(
+            borderRadius: const BorderRadius.all(Radius.circular(24.0)),
+            gradient: redBlockContainer,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.5),
+                spreadRadius: 5,
+                blurRadius: 9,
+                offset: const Offset(0, 3),
+              )
+            ]
+        ),
+        child: ExpansionTile(
+          leading: Text(widget.lobby.code.toString(), style: widgetContent,),
+          trailing: Icon(Icons.arrow_drop_down_sharp, color: widgetTextColour,),
+          title: Text(widget.lobby.name, style: widgetContent,),
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Flexible(
+                    flex: 1,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: getIconContainer(widget.lobby.iconIndex, false, false, landscapeIcons),
+                        ),
+                      ],
+                    )
+                ),
+                Flexible(
+                  flex: 2,
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 12.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          child: Text(widget.lobby.description, style: lobbyDescription,),
+                        ),
+                        const SizedBox(height: 12.0),
+                      ],
+                    ),
+                  ),
+                )
+              ],
             ),
           ],
         ),
@@ -300,11 +375,12 @@ class _LobbyPageState extends State<LobbyPage> with SingleTickerProviderStateMix
               ),
             );
           },
-          icon: Icon(Icons.arrow_back_rounded),
+          icon: Icon(Icons.cancel_outlined),
         ),
         backgroundColor: headerColour,
         title: const Text('App Bar'),
       ),
+      bottomNavigationBar: widget.id == widget.lobby.id? hostTools() : Container(),
       backgroundColor: backgroundColour,
       resizeToAvoidBottomInset: true,
       body: Padding(
@@ -313,11 +389,11 @@ class _LobbyPageState extends State<LobbyPage> with SingleTickerProviderStateMix
           //physics: NeverScrollableScrollPhysics(),
           shrinkWrap: true,
           children: [
-            lobbyDetails(),
+            //lobbyDetails(),
+            detailsExpansionTile(),
             menuSelector(),
             pageContent(),
             const SizedBox(height: 12.0,),
-            blockContainerCustomContent(context, hostTools(), redBlockContainer),
           ],
         ),
       ),
