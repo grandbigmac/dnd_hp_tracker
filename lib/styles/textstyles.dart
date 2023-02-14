@@ -15,3 +15,9 @@ TextStyle widgetContent = GoogleFonts.poppins(
       fontSize: 15,
     )
 );
+TextStyle lobbyDescription = GoogleFonts.poppins(
+  textStyle: TextStyle(
+    color: widgetTextColour,
+    fontSize: 12,
+  )
+);

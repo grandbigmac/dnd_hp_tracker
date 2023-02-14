@@ -1,6 +1,8 @@
 import 'dart:developer';
 import 'dart:math' as m;
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dnd_hp_tracker/controllers/create_lobby.dart';
+import 'package:dnd_hp_tracker/models/lobby.dart';
 import 'package:dnd_hp_tracker/resources/images.dart';
 import 'package:dnd_hp_tracker/resources/tools.dart';
 import 'package:dnd_hp_tracker/widgets/containers.dart';
@@ -11,6 +13,7 @@ import 'package:page_transition/page_transition.dart';
 
 import '../styles/colours.dart';
 import '../styles/textstyles.dart';
+import 'lobby_page.dart';
 
 class CreateLobby extends StatefulWidget {
   CreateLobby({super.key,});
@@ -204,8 +207,28 @@ class _CreateLobbyState extends State<CreateLobby> with TickerProviderStateMixin
                       child: Icon(Icons.cancel_sharp, size: 30, color: widgetTextColour,),
                     ),
                     InkWell(
-                      onTap: () {
+                      onTap: () async {
+                        loadingDialog(context);
+                        var id = await getDeviceId();
+                        Lobby lobby = Lobby(
+                            name: encounterName.text,
+                            description: encounterDescription.text,
+                            iconIndex: widget.iconIndex,
+                            code: widget.lobbyID,
+                            id: id!,
+                        );
+                        bool result = await postLobby(context, lobby);
 
+                        if (result) {
+                          Navigator.push(
+                            context,
+                            PageTransition(
+                              type: PageTransitionType.leftToRightWithFade,
+                              alignment: Alignment.topCenter,
+                              child: LobbyPage(lobby: lobby, id: id,),
+                            ),
+                          );
+                        }
                       },
                       child: Icon(Icons.check, size: 30, color: widgetTextColour,),
                     ),
