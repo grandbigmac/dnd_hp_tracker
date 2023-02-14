@@ -2,12 +2,17 @@ import 'dart:developer';
 import 'dart:math' as m;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dnd_hp_tracker/controllers/get_assets.dart';
+import 'package:dnd_hp_tracker/resources/tools.dart';
+import 'package:dnd_hp_tracker/views/launch.dart';
 import 'package:dnd_hp_tracker/widgets/containers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:hive/hive.dart';
 import 'package:page_transition/page_transition.dart';
 
+import '../models/character.dart';
+import '../resources/boxes.dart';
 import '../resources/classes.dart';
 import '../resources/images.dart';
 import '../styles/colours.dart';
@@ -16,7 +21,7 @@ import '../styles/textstyles.dart';
 class CreateCharacter extends StatefulWidget {
   CreateCharacter({super.key,});
 
-  int iconIndex = m.Random().nextInt(14);
+  int iconIndex = m.Random().nextInt(characterIcons.length);
 
   @override
   State<CreateCharacter> createState() => _CreateCharacterState();
@@ -73,8 +78,6 @@ class _CreateCharacterState extends State<CreateCharacter> with TickerProviderSt
   }
 
   void showIconSelection() {
-
-
     showModalBottomSheet<void>(context: context, builder: (BuildContext context) {
       return StatefulBuilder(
           builder: (BuildContext context, StateSetter setModalState) {
@@ -96,7 +99,7 @@ class _CreateCharacterState extends State<CreateCharacter> with TickerProviderSt
                       widget.iconIndex = i;
                     });
                   },
-                  child: getIconContainer(i, false, sel))
+                  child: getIconContainer(i, false, sel, characterIcons))
               );
               count++;
               if (count == 3) {
@@ -147,31 +150,96 @@ class _CreateCharacterState extends State<CreateCharacter> with TickerProviderSt
 
   void continueButton() {
     //Take all fields and create a character to add to the hivebox
-  }
-
-  Container getIconContainer(int index, bool big, bool selected) {
-    if (index == -1) {
-      return Container();
+    //Check that fields have been filled
+    if (charName.text.isEmpty) {
+      log('Name empty');
+      notification(context, 'Please enter a character name!');
+      return;
     }
-    return Container(
-      height: big ? 125: 100, width: big? 125: 100,
-      decoration: BoxDecoration(
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black38,
-              spreadRadius: 5,
-              blurRadius: 9,
-              offset: const Offset(0, 3),
-            )
-          ],
-          border: Border.all(color: selected? Colors.orange : widgetBackgroundRed, width: 5.0),
-          borderRadius: BorderRadius.circular(125),
-          image: DecorationImage(
-            image: characterIcons[index],
-            fit: BoxFit.cover,
+
+    showModalBottomSheet<void>(isDismissible: false, enableDrag: false, context: context, builder: (BuildContext context) {
+      return Container(
+        height: 300,
+        color: widgetBackgroundRed,
+        child: Padding(
+          padding: const EdgeInsets.all(0),
+          child: Column(
+            children: [
+              const SizedBox(height: 12.0),
+              Text('Add this character?', style: widgetContent,),
+              const SizedBox(height: 12.0),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Flexible(
+                    flex: 2,
+                    child: Container(
+                      padding: const EdgeInsets.only(top: 24,),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text('Character Name:', style: widgetContent,),
+                          Text(charName.text, style: widgetTitle,),
+                          const SizedBox(height: 12.0,),
+                          Text('Class:', style: widgetContent,),
+                          Text(selectedClass, style: widgetTitle,),
+                          const SizedBox(height: 48.0),
+                          InkWell(
+                            onTap: () {
+                              log('Back');
+                              Navigator.pop(context);
+                            },
+                            child: Icon(Icons.cancel_sharp, size: 30, color: widgetTextColour,),
+                          ),
+                          const SizedBox(height: 12.0),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Flexible(
+                    flex: 1,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const SizedBox(height: 24,),
+                        getIconContainer(widget.iconIndex, true, false, characterIcons),
+                        const SizedBox(height: 48.0),
+                        InkWell(
+                          onTap: () {
+                            log('Next');
+                            characterBox.add(
+                                Character(
+                                  name: charName.text,
+                                  initiative: selectedInitiative,
+                                  charClass: selectedClass,
+                                  iconIndex: widget.iconIndex,
+                                )
+                            );
+                            Navigator.pop(context);
+                            notification(context, '${charName.text} added to character list!');
+                            Navigator.push(
+                              context,
+                              PageTransition(
+                                type: PageTransitionType.leftToRightWithFade,
+                                alignment: Alignment.topCenter,
+                                child: const HomePage(),
+                              ),
+                            );
+                          },
+                          child: Icon(Icons.check, size: 30, color: widgetTextColour,),
+                        ),
+                        const SizedBox(height: 12.0),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ],
           )
-      ),
-    );
+        ),
+      );
+    });
   }
 
   @override
@@ -230,7 +298,7 @@ class _CreateCharacterState extends State<CreateCharacter> with TickerProviderSt
     }
 
     Widget iconContainer(int index) {
-      Container icon = getIconContainer(index, true, false);
+      Container icon = getIconContainer(index, true, false, characterIcons);
 
       iconScale = 1 - iconAnim.value;
 
@@ -250,7 +318,7 @@ class _CreateCharacterState extends State<CreateCharacter> with TickerProviderSt
       return Container(
           child: Column(
             children: [
-              Text('Select an icon for your character:', style: widgetContent, textAlign: TextAlign.center,),
+              Text('Icon', style: widgetContent, textAlign: TextAlign.center,),
               const SizedBox(height: 12.0),
               iconContainer(widget.iconIndex),
             ],
@@ -285,7 +353,7 @@ class _CreateCharacterState extends State<CreateCharacter> with TickerProviderSt
               scale: continueScale,
               child: InkWell(
                 onTap: () {
-
+                  continueButton();
                 },
                 child: Icon(Icons.add_circle_outline_sharp, size: 50, color: widgetTextColour,),
               ),

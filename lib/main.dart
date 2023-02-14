@@ -1,7 +1,11 @@
+import 'package:dnd_hp_tracker/models/character.dart';
+import 'package:dnd_hp_tracker/resources/boxes.dart';
 import 'package:dnd_hp_tracker/styles/colours.dart';
 import 'package:dnd_hp_tracker/views/launch.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
+import 'package:path_provider/path_provider.dart';
 
 import 'firebase_options.dart';
 
@@ -11,6 +15,14 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  final appDocDir = await getApplicationDocumentsDirectory();
+  Hive.init(appDocDir.path);
+  Hive.registerAdapter(CharacterAdapter());
+  await Hive.openBox('characters');
+  await Hive.openBox('temp');
+  characterBox = Hive.box('characters');
+
   runApp(const MyApp());
 }
 

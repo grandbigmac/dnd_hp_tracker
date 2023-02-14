@@ -41,6 +41,9 @@ dependencies:
   cloud_firestore: ^4.3.2
   firebase_core: ^2.5.0
   hive: ^2.2.3
+  path_provider: ^2.0.12
+  hive_generator: ^2.0.0
+  build_runner: ^2.3.3
 
 dev_dependencies:
   flutter_test:
@@ -78,6 +81,12 @@ flutter:
     - assets/images/characters/sorcerer.PNG
     - assets/images/characters/warlock.PNG
     - assets/images/characters/wizard.PNG
+    - assets/images/landscapes/bridge.PNG
+    - assets/images/landscapes/canyon.PNG
+    - assets/images/landscapes/castle.PNG
+    - assets/images/landscapes/castle2.PNG
+    - assets/images/landscapes/misty.PNG
+    - assets/images/landscapes/mountain.PNG
     - assets/images/default.PNG
 
   # To add assets to your application, add an assets section, like this:
