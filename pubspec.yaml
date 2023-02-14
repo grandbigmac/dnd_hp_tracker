@@ -82,13 +82,12 @@ flutter:
     - assets/images/characters/sorcerer.PNG
     - assets/images/characters/warlock.PNG
     - assets/images/characters/wizard.PNG
-    - assets/images/landscapes/bridge.PNG
-    - assets/images/landscapes/canyon.PNG
-    - assets/images/landscapes/castle.PNG
-    - assets/images/landscapes/castle2.PNG
-    - assets/images/landscapes/misty.PNG
-    - assets/images/landscapes/mountain.PNG
-    - assets/images/default.PNG
+    - assets/images/landscapes/bridge.png
+    - assets/images/landscapes/canyon.png
+    - assets/images/landscapes/castle.png
+    - assets/images/landscapes/castle2.png
+    - assets/images/landscapes/misty.png
+    - assets/images/landscapes/mountain.png
 
   # To add assets to your application, add an assets section, like this:
   # assets:

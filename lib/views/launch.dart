@@ -243,7 +243,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                           PageTransition(
                             type: PageTransitionType.leftToRightWithFade,
                             alignment: Alignment.topCenter,
-                            child: const LobbyList(),
+                            child: LobbyList(selectedCharIndex: 0,),
                           ),
                         );
                       },
