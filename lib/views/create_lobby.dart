@@ -359,7 +359,7 @@ class _CreateLobbyState extends State<CreateLobby> with TickerProviderStateMixin
     return Scaffold(
       appBar: AppBar(
         backgroundColor: headerColour,
-        title: const Text('App Bar'),
+        title: const Text('Host a Lobby'),
       ),
       backgroundColor: backgroundColour,
       resizeToAvoidBottomInset: true,

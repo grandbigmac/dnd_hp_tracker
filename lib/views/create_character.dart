@@ -399,7 +399,7 @@ class _CreateCharacterState extends State<CreateCharacter> with TickerProviderSt
     return Scaffold(
       appBar: AppBar(
         backgroundColor: headerColour,
-        title: const Text('App Bar'),
+        title: const Text('Create a Character'),
       ),
       backgroundColor: backgroundColour,
       resizeToAvoidBottomInset: true,

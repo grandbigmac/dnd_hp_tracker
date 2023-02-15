@@ -385,10 +385,10 @@ class _LobbyPageState extends State<LobbyPage> with SingleTickerProviderStateMix
                       const SizedBox(width: 12.0),
                     ],
                   ),
-                )
+                ),
               ]
           ),
-          const SizedBox(height: 12.0),
+          lineOut(),
         ],
       );
     }
@@ -615,7 +615,7 @@ class _LobbyPageState extends State<LobbyPage> with SingleTickerProviderStateMix
           icon: Icon(Icons.cancel_outlined),
         ),
         backgroundColor: headerColour,
-        title: const Text('App Bar'),
+        title: Text('Lobby: ${widget.lobby.name}'),
       ),
       bottomNavigationBar: widget.id == widget.lobby.id? hostTools() : null,
       backgroundColor: backgroundColour,

@@ -230,7 +230,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     return Scaffold(
       appBar: AppBar(
         backgroundColor: headerColour,
-        title: const Text('App Bar'),
+        title: const Text('Home'),
       ),
       bottomNavigationBar: bottomBar(),
       backgroundColor: backgroundColour,

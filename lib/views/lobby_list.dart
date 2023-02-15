@@ -280,10 +280,14 @@ class _LobbyListState extends State<LobbyList> with SingleTickerProviderStateMix
       );
     }
 
+    Widget listHeader() {
+      return blockContainer(context, 'Join a Lobby', 'Select a lobby to join using the correct lobby code.', redBlockContainer);
+    }
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: headerColour,
-        title: const Text('App Bar'),
+        title: const Text('Lobby List'),
       ),
       backgroundColor: backgroundColour,
       resizeToAvoidBottomInset: true,
@@ -292,6 +296,7 @@ class _LobbyListState extends State<LobbyList> with SingleTickerProviderStateMix
         child: ListView(
           shrinkWrap: true,
           children: [
+            listHeader(),
             lobbyStream(),
           ],
         ),

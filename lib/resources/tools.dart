@@ -46,3 +46,17 @@ int rollD20(int mod) {
   var rng = m.Random();
   return rng.nextInt(20) + 1 + mod;
 }
+
+Column lineOut() {
+  return Column(
+    children: [
+      const SizedBox(height: 8.0),
+      Container(
+        width: double.infinity,
+        height: 1,
+        color: widgetTextColour,
+      ),
+      const SizedBox(height: 8.0),
+    ],
+  );
+}
