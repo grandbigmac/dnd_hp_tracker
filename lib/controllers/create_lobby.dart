@@ -46,11 +46,12 @@ Future<bool> joinLobby(BuildContext context, Character character, String lobbyID
   //POST CHARACTER STATS TO CHARACTERS COLLECTION
   bool success = false;
   var id = await getDeviceId();
+  int init = rollD20(character.initiative);
   var data = <String, dynamic>{
     'name': character.name,
     'charClass': character.charClass,
     'iconIndex': character.iconIndex,
-    'initiative': character.initiative,
+    'initiative': init,
     'lobbyID': lobbyID,
     'monster': false,
     'selected': false,
@@ -71,11 +72,12 @@ Future<bool> joinLobby(BuildContext context, Character character, String lobbyID
 Future<bool> addMonster(BuildContext context, Character character, String lobbyID, String monID) async {
   //POST CHARACTER STATS TO CHARACTERS COLLECTION
   bool success = false;
+  int init = rollD20(character.initiative);
   var data = <String, dynamic>{
     'name': character.name,
     'charClass': character.charClass,
     'iconIndex': character.iconIndex,
-    'initiative': character.initiative,
+    'initiative': init,
     'lobbyID': lobbyID,
     'monster': true,
     'selected': false,
@@ -116,4 +118,24 @@ Future<bool> updateIndex(BuildContext context, String lobbyID, int newIndex) asy
     log(e.toString());
   }
   return success;
+}
+
+Future<void> removeSelectedInit(BuildContext context, String id) async {
+  try {
+    await FirebaseFirestore.instance.collection('characters').doc(id).update(
+        {'selected': false});
+  }
+  catch (e) {
+    log(e.toString());
+  }
+}
+
+Future<void> addSelectedInit(BuildContext context, String id) async {
+  try {
+    await FirebaseFirestore.instance.collection('characters').doc(id).update(
+        {'selected': true});
+  }
+  catch (e) {
+    log(e.toString());
+  }
 }

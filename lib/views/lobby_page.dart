@@ -33,6 +33,7 @@ class _LobbyPageState extends State<LobbyPage> with SingleTickerProviderStateMix
   int selIndex = 0;
   int characterTotal = 0;
   int selMonInit = 0;
+  List characters = [];
 
   @override
   void initState() {
@@ -204,15 +205,15 @@ class _LobbyPageState extends State<LobbyPage> with SingleTickerProviderStateMix
 
     Widget lobbyCard(DocumentSnapshot doc, int index) {
       //Listen to the current turnIndex and update as appropriate
-      FirebaseFirestore.instance
-          .collection('lobbies')
-          .doc(widget.lobby.id)
-          .snapshots()
-          .listen((snapshot) {
-        final data = snapshot.data() as Map<String, dynamic>;
-        selIndex = data["turnIndex"];
-        log('INDEX: $selIndex');
-      });
+      //FirebaseFirestore.instance
+      //    .collection('lobbies')
+      //    .doc(widget.lobby.id)
+      //    .snapshots()
+      //    .listen((snapshot) {
+      //  final data = snapshot.data() as Map<String, dynamic>;
+      //  selIndex = data["turnIndex"];
+      //  log('INDEX: $selIndex');
+      //});
 
       //Add a 'selected' field to each character
       //If selIndex == characterIndex, update its selected field
@@ -225,7 +226,7 @@ class _LobbyPageState extends State<LobbyPage> with SingleTickerProviderStateMix
           padding: const EdgeInsets.all(24.0),
           decoration: BoxDecoration(
               borderRadius: const BorderRadius.all(Radius.circular(24.0)),
-              color: index == selIndex ? widgetBackgroundRedDark : widgetBackgroundRed,
+              color: doc['selected'] ? widgetBackgroundRedDark : widgetBackgroundRed,
               boxShadow: [
                 BoxShadow(
                   color: Colors.grey.withOpacity(0.5),
@@ -265,13 +266,13 @@ class _LobbyPageState extends State<LobbyPage> with SingleTickerProviderStateMix
     Widget initiativeStream() {
 
       return Container(
-        height: MediaQuery.of(context).size.height * 0.3,
+        height: MediaQuery.of(context).size.height * 0.7,
         width: double.infinity,
         child: StreamBuilder(
           stream: FirebaseFirestore.instance.collection('characters').where('lobbyID', isEqualTo: widget.lobby.id).orderBy('initiative', descending: true).snapshots(),
           builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
             if (!snapshot.hasData) {
-              return blockContainer(context, 'No lobbies found!', '', redBlockContainer);
+              return blockContainer(context, 'No characters found!', '', redBlockContainer);
             }
             else {
               return ListView.builder(
@@ -281,6 +282,7 @@ class _LobbyPageState extends State<LobbyPage> with SingleTickerProviderStateMix
                   itemBuilder: (context, index) {
                     //Add a blank space underneath the last card so it's not cut off
                     //itemCount is increased for this
+                    characters = snapshot.data.docs;
                     characterTotal = snapshot.data.docs.length;
                     if (index == snapshot.data.docs.length) {
                       return SizedBox(height: MediaQuery.of(context).size.height * 0.2);
@@ -380,6 +382,10 @@ class _LobbyPageState extends State<LobbyPage> with SingleTickerProviderStateMix
                 log('Number of characters: $characterTotal');
                 bool success = await updateIndex(context, widget.lobby.id, newIndex);
                 if (success) {
+                  //Remove 'selected' from character at index selIndex
+                  await removeSelectedInit(context, characters[selIndex].id);
+                  //Add 'selected' for character at index newIndex
+                  await addSelectedInit(context, characters[newIndex].id);
                   setState(() {
                     selIndex = newIndex;
                     log('New index is: $selIndex');
