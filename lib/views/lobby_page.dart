@@ -55,149 +55,174 @@ class _LobbyPageState extends State<LobbyPage> with SingleTickerProviderStateMix
 
   void createMonster() {
     TextEditingController monNameController = TextEditingController();
+    TextEditingController monTypeController = TextEditingController();
 
     showModalBottomSheet<void>(isScrollControlled: true, context: context, builder: (BuildContext context) {
-      return StatefulBuilder(
-          builder: (BuildContext context, StateSetter setModalState) {
+      return Scaffold(
+        body: StatefulBuilder(
+            builder: (BuildContext contextM, StateSetter setModalState) {
 
-            List<Padding> rows = [];
-            //If list % 3 is not 0, add remainder number of empty icons to list
+              List<Padding> rows = [];
+              //If list % 3 is not 0, add remainder number of empty icons to list
 
-            int count = 0;
-            List<Widget> items = [];
-            for (int i = 0; i < monsterIcons.length; i++) {
-              bool sel = i == widget.monIndex;
-              items.add(GestureDetector(
-                  onTap: () {
-                    log(i.toString());
-                    setModalState(() {
-                      widget.monIndex = i;
-                    });
-                    setState(() {
-                      widget.monIndex = i;
-                    });
-                  },
-                  child: getIconContainer(i, false, sel, monsterIcons))
-              );
-              count++;
-              if (count == 3) {
-                rows.add(Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: items,
-                  ),
-                ));
-                items = [];
-                count = 0;
+              int count = 0;
+              List<Widget> items = [];
+              for (int i = 0; i < monsterIcons.length; i++) {
+                bool sel = i == widget.monIndex;
+                items.add(GestureDetector(
+                    onTap: () {
+                      log(i.toString());
+                      setModalState(() {
+                        widget.monIndex = i;
+                      });
+                      setState(() {
+                        widget.monIndex = i;
+                      });
+                    },
+                    child: getIconContainer(i, false, sel, monsterIcons))
+                );
+                count++;
+                if (count == 3) {
+                  rows.add(Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: items,
+                    ),
+                  ));
+                  items = [];
+                  count = 0;
+                }
               }
-            }
 
-            ListView mainGrid = ListView(
-              children: rows,
-            );
+              ListView mainGrid = ListView(
+                children: rows,
+              );
 
-            return Container(
-              color: widgetBackgroundRed,
-              child: Padding(
-                padding: const EdgeInsets.all(0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: 24.0),
-                    Container(
-                      child: Padding(
-                        padding: const EdgeInsets.all(12.0),
-                        child: Center(
-                          child: Text(
-                            'Select an icon for your monster.',
-                            style: widgetContent,
+              return Container(
+                color: widgetBackgroundRed,
+                child: Padding(
+                  padding: const EdgeInsets.all(0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: 24.0),
+                      Container(
+                        child: Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: Center(
+                            child: Text(
+                              'Select an icon for your monster.',
+                              style: widgetContent,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    Container(height: MediaQuery.of(context).size.height * 0.4, child: mainGrid),
-                    Padding(
-                      padding: const EdgeInsets.all(12.0),
-                      child: Center(
-                        child: Text('Monster Name', style: widgetContent),
-                      ),
-                    ),
-                    Container(
-                      width: MediaQuery.of(context).size.width * 0.5,
-                      child: TextField(
-                        textAlign: TextAlign.center,
-                        controller: monNameController,
-                        style: widgetContent,
-                        decoration: InputDecoration(
-                          focusColor: widgetBackgroundRed,
-                        ),
-                      ),
-                    ),
-                    Padding(
+                      Container(height: MediaQuery.of(context).size.height * 0.4, child: mainGrid),
+                      Padding(
                         padding: const EdgeInsets.all(12.0),
-                        child: Text('Monster initiative', style: widgetContent),
-                    ),
-                    Container(
-                      width: MediaQuery.of(context).size.width * 0.3,
-                      child: DropdownButtonFormField<int>(
-                          dropdownColor: widgetBackgroundRed,
-                          style: widgetContent,
-                          isExpanded: true,
-                          items: initiatives(),
-                          onChanged: (value) {
-                            setState(() {
-                              selMonInit = value!;
-                            });
-                          }
+                        child: Center(
+                          child: Text('Monster Name', style: widgetContent),
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 48.0),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        InkWell(
-                          onTap: () {
-                            log('Back');
-                            Navigator.pop(context);
-                          },
-                          child: Icon(Icons.cancel_sharp, size: 30, color: widgetTextColour,),
+                      Container(
+                        width: MediaQuery.of(context).size.width * 0.5,
+                        child: TextField(
+                          textAlign: TextAlign.center,
+                          controller: monNameController,
+                          style: widgetContent,
+                          decoration: InputDecoration(
+                            focusColor: widgetBackgroundRed,
+                          ),
                         ),
-                        InkWell(
-                          onTap: () async {
-                            //Create monster as character
-                            //Pass character to firestore
-                            loadingDialog(context);
-                            Character mon = Character(
-                                name: monNameController.text,
-                                charClass: '',
-                                initiative: selMonInit,
-                                iconIndex: widget.monIndex,
-                                currentHP: 0,
-                                maxHP: 0,
-                            );
-                            bool success = await addMonster(context, mon, widget.lobby.id, generateRandomString());
-                            if (success) {
-                              Navigator.pop(context);
-                              Navigator.pop(context);
-                              log('Monster added');
-                            }
-                            else {
-                              Navigator.pop(context);
-                              Navigator.pop(context);
-                              notification(context, 'Failed to create monster!');
-                            }
-                          },
-                          child: Icon(Icons.check, size: 30, color: widgetTextColour,),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: Center(
+                          child: Text('Monster Type', style: widgetContent),
                         ),
-                      ],
-                    )
-                  ],
+                      ),
+                      Container(
+                        width: MediaQuery.of(context).size.width * 0.5,
+                        child: TextField(
+                          textAlign: TextAlign.center,
+                          controller: monTypeController,
+                          style: widgetContent,
+                          decoration: InputDecoration(
+                            focusColor: widgetBackgroundRed,
+                          ),
+                        ),
+                      ),
+                      Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: Text('Monster initiative', style: widgetContent),
+                      ),
+                      Container(
+                        width: MediaQuery.of(context).size.width * 0.3,
+                        child: DropdownButtonFormField<int>(
+                            dropdownColor: widgetBackgroundRed,
+                            style: widgetContent,
+                            isExpanded: true,
+                            items: initiatives(),
+                            onChanged: (value) {
+                              setState(() {
+                                selMonInit = value!;
+                              });
+                            }
+                        ),
+                      ),
+                      const SizedBox(height: 48.0),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          InkWell(
+                            onTap: () {
+                              log('Back');
+                              Navigator.pop(context);
+                            },
+                            child: Icon(Icons.cancel_sharp, size: 30, color: widgetTextColour,),
+                          ),
+                          InkWell(
+                            onTap: () async {
+                              //Create monster as character
+                              //Pass character to firestore
+                              loadingDialog(context);
+                              if (monNameController.text.isEmpty || monTypeController.text.isEmpty) {
+                                Navigator.pop(context);
+                                notification(contextM, 'Please fill in all fields to create a monster!');
+                                return;
+                              }
+                              Character mon = Character(
+                                  name: monNameController.text,
+                                  charClass: monTypeController.text,
+                                  initiative: selMonInit,
+                                  iconIndex: widget.monIndex,
+                                  currentHP: 0,
+                                  maxHP: 0,
+                              );
+                              bool success = await addMonster(context, mon, widget.lobby.id, generateRandomString());
+                              if (success) {
+                                Navigator.pop(context);
+                                Navigator.pop(context);
+                                log('Monster added');
+                              }
+                              else {
+                                Navigator.pop(context);
+                                Navigator.pop(context);
+                                notification(context, 'Failed to create monster!');
+                              }
+                            },
+                            child: Icon(Icons.check, size: 30, color: widgetTextColour,),
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
                 ),
-              ),
-            );
-          }
+              );
+            }
+        ),
       );
     });
   }
@@ -464,13 +489,16 @@ class _LobbyPageState extends State<LobbyPage> with SingleTickerProviderStateMix
             InkWell(
               onTap: () {
                 //Show modal menu listing monsters that have been added and the option to delete them
+                notification(context, 'This button is not yet complete, it will allow you to remove '
+                    'added monsters from your initiative.');
               },
               child: Icon(Icons.person, color: widgetTextColour, size: 25,),
             ),
             const SizedBox(width: 12.0,),
             InkWell(
               onTap: () {
-
+                notification(context, 'This button is not yet complete, it will allow you to '
+                    'reroll all initiatives.');
               },
               child: Icon(Icons.bolt, color: widgetTextColour, size: 25,),
             ),
