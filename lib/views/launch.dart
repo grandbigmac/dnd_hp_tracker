@@ -93,7 +93,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                             Text('Class:', style: widgetContent,),
                             Text(characterBox.getAt(index).charClass, style: widgetTitle,),
                             const SizedBox(height: 12.0),
-                            Text('Initiative', style: widgetContent,),
+                            Text('Initiative Mod', style: widgetContent,),
                             Text(characterBox.getAt(index).initiative.toString(), style: widgetTitle,),
                             const SizedBox(height: 12.0),
                           ],
@@ -107,6 +107,15 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                         children: [
                           const SizedBox(height: 24,),
                           getIconContainer(characterBox.getAt(index).iconIndex, true, false, characterIcons),
+                          const SizedBox(height: 12.0),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Icons.favorite, color: widgetTextColour,),
+                              const SizedBox(width: 12.0,),
+                              Text(characterBox.getAt(index).maxHP.toString(), style: widgetContent,),
+                            ],
+                          ),
                           const SizedBox(height: 24.0),
                           InkWell(
                             onTap: () {

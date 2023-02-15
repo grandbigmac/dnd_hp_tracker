@@ -31,6 +31,7 @@ class _CreateCharacterState extends State<CreateCharacter> with TickerProviderSt
 
   TextEditingController charName = TextEditingController();
   TextEditingController charClass = TextEditingController();
+  TextEditingController charHP = TextEditingController();
   String selectedClass = 'Barbarian';
   int selectedInitiative = 0;
   late AnimationController iconAnim;
@@ -156,6 +157,11 @@ class _CreateCharacterState extends State<CreateCharacter> with TickerProviderSt
       notification(context, 'Please enter a character name!');
       return;
     }
+    else if (charHP.text.isEmpty) {
+      log('HP empty');
+      notification(context, 'Please enter your character\'s max HP!');
+      return;
+    }
 
     showModalBottomSheet<void>(isDismissible: false, enableDrag: false, context: context, builder: (BuildContext context) {
       return Container(
@@ -203,7 +209,16 @@ class _CreateCharacterState extends State<CreateCharacter> with TickerProviderSt
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         const SizedBox(height: 24,),
-                        getIconContainer(widget.iconIndex, true, false, characterIcons),
+                        getIconContainer(widget.iconIndex, false, false, characterIcons),
+                        const SizedBox(height: 12.0),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.favorite, color: widgetTextColour,),
+                            const SizedBox(width: 12.0,),
+                            Text(charHP.text, style: widgetContent,),
+                          ],
+                        ),
                         const SizedBox(height: 48.0),
                         InkWell(
                           onTap: () {
@@ -214,6 +229,8 @@ class _CreateCharacterState extends State<CreateCharacter> with TickerProviderSt
                                   initiative: selectedInitiative,
                                   charClass: selectedClass,
                                   iconIndex: widget.iconIndex,
+                                  currentHP: int.parse(charHP.text),
+                                  maxHP: int.parse(charHP.text),
                                 )
                             );
                             Navigator.pop(context);
@@ -294,6 +311,22 @@ class _CreateCharacterState extends State<CreateCharacter> with TickerProviderSt
             )
           ],
         )
+      );
+    }
+
+    Widget chooseHP() {
+      return Container(
+          child: Column(
+            children: [
+              Text('Max HP', style: widgetContent,),
+              TextField(
+                textAlign: TextAlign.center,
+                controller: charHP,
+                style: widgetContent,
+                keyboardType: TextInputType.number,
+              ),
+            ],
+          )
       );
     }
 
@@ -384,7 +417,13 @@ class _CreateCharacterState extends State<CreateCharacter> with TickerProviderSt
               children: [
                 Flexible(
                   flex: 1,
-                  child: blockContainerCustomContent(context, chooseIcon(), redBlockContainer),
+                  child: Column(
+                    children: [
+                      blockContainerCustomContent(context, chooseIcon(), redBlockContainer),
+                      const SizedBox(height: 12.0),
+                      blockContainerCustomContent(context, chooseHP(), redBlockContainer),
+                    ],
+                  ),
                 ),
                 const SizedBox(width: 12.0),
                 Flexible(

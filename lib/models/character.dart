@@ -12,11 +12,17 @@ class Character {
   int initiative;
   @HiveField(3)
   int iconIndex;
+  @HiveField(4)
+  int currentHP;
+  @HiveField(5)
+  int maxHP;
 
   Character({
     required this.name,
     required this.charClass,
     required this.initiative,
-    required this.iconIndex
+    required this.iconIndex,
+    required this.currentHP,
+    required this.maxHP,
   });
 }

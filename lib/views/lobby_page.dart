@@ -173,7 +173,9 @@ class _LobbyPageState extends State<LobbyPage> with SingleTickerProviderStateMix
                                 name: monNameController.text,
                                 charClass: '',
                                 initiative: selMonInit,
-                                iconIndex: widget.monIndex
+                                iconIndex: widget.monIndex,
+                                currentHP: 0,
+                                maxHP: 0,
                             );
                             bool success = await addMonster(context, mon, widget.lobby.id, generateRandomString());
                             if (success) {
