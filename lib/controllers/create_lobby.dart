@@ -175,3 +175,12 @@ Future<void> takeHealingCharacter(BuildContext context, DocumentSnapshot doc) as
     log(e.toString());
   }
 }
+
+Future<void> removeMonster(String id) async {
+  try {
+    await FirebaseFirestore.instance.collection('characters').doc(id).delete();
+  }
+  catch (e) {
+    log(e.toString());
+  }
+}

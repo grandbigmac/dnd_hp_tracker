@@ -227,6 +227,87 @@ class _LobbyPageState extends State<LobbyPage> with SingleTickerProviderStateMix
     });
   }
 
+  void showMonsterListModal() {
+    showModalBottomSheet<void>(context: context, builder: (BuildContext context) {
+      return Scaffold(
+        body: StatefulBuilder(
+            builder: (BuildContext contextM, StateSetter setModalState) {
+
+              List<Widget> monsters = [];
+              for (DocumentSnapshot i in characters) {
+                if (i['monster'] == false) {
+                  continue;
+                }
+                Container row = Container(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      getIconContainer(i['iconIndex'], false, false, monsterIcons),
+                      const SizedBox(width: 12.0),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(i['name'], style: widgetTitle,),
+                          Text(i['charClass'], style: widgetContent),
+                          Text(i['initiative'].toString(), style: widgetContent),
+                        ]
+                      ),
+                      const Spacer(),
+                      InkWell(
+                        onTap: () async {
+                          //Remove this monster from the firestore
+                          loadingDialog(context);
+                          //Need some code in here to handle what happens when removing a monster breaks initiative tracking
+                          await removeMonster(i.id);
+                          Navigator.pop(context);
+                          Navigator.pop(context);
+                          setState(() {
+
+                          });
+                        },
+                        child: Icon(Icons.cancel_outlined, color: widgetTextColour, size: 50,)
+                      ),
+                      const SizedBox(width: 24.0),
+                    ]
+                  ),
+                );
+                monsters.add(row);
+              }
+
+              return Container(
+                color: widgetBackground,
+                child: Padding(
+                  padding: const EdgeInsets.all(0),
+                  child: ListView(
+                    children: [
+                      const SizedBox(height: 24.0),
+                      Container(
+                        child: Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: Center(
+                            child: Text(
+                              'Monsters added to this encounter:',
+                              style: widgetContent,
+                            ),
+                          ),
+                        ),
+                      ),
+                      Column(
+                        children: monsters,
+                      )
+                    ],
+                  ),
+                ),
+              );
+            }
+        ),
+      );
+    });
+  }
+
   void _showTurnSnackBar(bool selected, bool matching) {
     if (selected && matching) {
       WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
@@ -402,7 +483,7 @@ class _LobbyPageState extends State<LobbyPage> with SingleTickerProviderStateMix
                       Column(
                           children: [
                             Icon(Icons.favorite, color: widgetTextColour,),
-                            Text(doc['currentHP'].toString(), style: widgetContent,),
+                            Text('${doc['currentHP']} / ${doc['maxHP']}', style: widgetContent,),
                           ]
                       ),
                       const SizedBox(width: 12.0),
@@ -491,6 +572,8 @@ class _LobbyPageState extends State<LobbyPage> with SingleTickerProviderStateMix
                 //Show modal menu listing monsters that have been added and the option to delete them
                 notification(context, 'This button is not yet complete, it will allow you to remove '
                     'added monsters from your initiative.');
+
+                showMonsterListModal();
               },
               child: Icon(Icons.person, color: widgetTextColour, size: 25,),
             ),
@@ -517,7 +600,13 @@ class _LobbyPageState extends State<LobbyPage> with SingleTickerProviderStateMix
                 bool success = await updateIndex(context, widget.lobby.id, newIndex);
                 if (success) {
                   //Remove 'selected' from character at index selIndex
-                  await removeSelectedInit(context, characters[selIndex].id);
+
+                  if (selIndex <= characters.length) {
+                    await removeSelectedInit(context, characters[selIndex].id);
+                  }
+                  else {
+                    newIndex = selIndex;
+                  }
                   //Add 'selected' for character at index newIndex
                   await addSelectedInit(context, characters[newIndex].id);
                   setState(() {
