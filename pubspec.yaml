@@ -88,6 +88,15 @@ flutter:
     - assets/images/landscapes/castle2.PNG
     - assets/images/landscapes/misty.PNG
     - assets/images/landscapes/mountain.PNG
+    - assets/images/monsters/aboleth.png
+    - assets/images/monsters/barghest.png
+    - assets/images/monsters/beholder.png
+    - assets/images/monsters/duergar.png
+    - assets/images/monsters/goblin.png
+    - assets/images/monsters/illithid.png
+    - assets/images/monsters/ogre.png
+    - assets/images/monsters/owlbear.png
+    - assets/images/monsters/troll.png
 
   # To add assets to your application, add an assets section, like this:
   # assets:

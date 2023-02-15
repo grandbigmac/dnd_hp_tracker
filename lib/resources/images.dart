@@ -29,10 +29,13 @@ List landscapeIcons = [
 ];
 
 List monsterIcons = [
-  const AssetImage('assets/images/landscapes/bridge.PNG'),
-  const AssetImage('assets/images/landscapes/canyon.PNG'),
-  const AssetImage('assets/images/landscapes/castle.PNG'),
-  const AssetImage('assets/images/landscapes/castle2.PNG'),
-  const AssetImage('assets/images/landscapes/misty.PNG'),
-  const AssetImage('assets/images/landscapes/mountain.PNG'),
+  const AssetImage('assets/images/monsters/aboleth.png'),
+  const AssetImage('assets/images/monsters/barghest.png'),
+  const AssetImage('assets/images/monsters/beholder.png'),
+  const AssetImage('assets/images/monsters/duergar.png'),
+  const AssetImage('assets/images/monsters/goblin.png'),
+  const AssetImage('assets/images/monsters/illithid.png'),
+  const AssetImage('assets/images/monsters/ogre.png'),
+  const AssetImage('assets/images/monsters/owlbear.png'),
+  const AssetImage('assets/images/monsters/troll.png'),
 ];
