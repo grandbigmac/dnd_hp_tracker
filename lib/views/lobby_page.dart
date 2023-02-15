@@ -307,13 +307,92 @@ class _LobbyPageState extends State<LobbyPage> with SingleTickerProviderStateMix
       );
     }
 
+    Widget characterHealthCard(DocumentSnapshot doc) {
+      bool yourChar = doc.id == widget.lobby.id;
+      log('My Device ID: ${widget.id}');
+      log('My Lobby DocID: ${widget.lobby.id}');
+
+      Widget takeDamage() {
+        return InkWell(
+          onTap: () async {
+            log('Take damage');
+            await takeDamageCharacter(context, doc);
+            setState(() {
+
+            });
+          },
+          child: Icon(Icons.arrow_drop_down_rounded, color: widgetTextColour,),
+        );
+      }
+
+      Widget takeHealing() {
+        return InkWell(
+          onTap: () async {
+            log('Take Healing');
+            await takeHealingCharacter(context, doc);
+            setState(() {
+
+            });
+          },
+          child: Icon(Icons.arrow_drop_up_rounded, color: widgetTextColour,),
+        );
+      }
+
+      return Column(
+        children: [
+          Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                getIconContainerSmall(doc['iconIndex'], yourChar, characterIcons),
+                const SizedBox(width: 24.0),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(doc['name'], style: widgetTitle, overflow: TextOverflow.ellipsis),
+                    Text(doc['charClass'], style: widgetContent,),
+                  ]
+                ),
+                const Spacer(),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const SizedBox(width: 12.0),
+                    yourChar? takeHealing() : Container(),
+                    const SizedBox(width: 12.0),
+                    Column(
+                        children: [
+                          Icon(Icons.favorite, color: widgetTextColour,),
+                          Text(doc['currentHP'].toString(), style: widgetContent,),
+                        ]
+                    ),
+                    const SizedBox(width: 12.0),
+                    yourChar? takeDamage() : Container(),
+                    const SizedBox(width: 12.0),
+                  ],
+                )
+              ]
+          ),
+          const SizedBox(height: 12.0),
+        ],
+      );
+    }
+
     Widget healthTracker() {
+      List<Widget> characterBlocks = [];
+      for (var i in characters) {
+        if (i['monster']) {
+          continue;
+        }
+        characterBlocks.add(characterHealthCard(i));
+      }
+
+
       return IgnorePointer(
         ignoring: option? false : true,
-        child: Container(
-            height: MediaQuery.of(context).size.height * 0.3,
-            child: Text('This is the health tracker', style: widgetTitle,)
-        ),
+        child: Column(
+          children: characterBlocks,
+        )
       );
     }
 
@@ -327,7 +406,10 @@ class _LobbyPageState extends State<LobbyPage> with SingleTickerProviderStateMix
           ),
           AnimatedOpacity(
               duration: animDur, opacity: option? 1.0 : 0.0,
-              child: blockContainerCustomContent(context, healthTracker(), redBlockContainer)),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: blockContainerCustomContent(context, healthTracker(), redBlockContainer),
+              )),
         ],
       );
     }

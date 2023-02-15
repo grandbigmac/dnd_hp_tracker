@@ -19,9 +19,9 @@ void main() async {
   final appDocDir = await getApplicationDocumentsDirectory();
   Hive.init(appDocDir.path);
   Hive.registerAdapter(CharacterAdapter());
-  await Hive.openBox('characters');
+  await Hive.openBox('character');
   await Hive.openBox('temp');
-  characterBox = Hive.box('characters');
+  characterBox = Hive.box('character');
 
   runApp(const MyApp());
 }

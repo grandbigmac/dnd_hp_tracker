@@ -55,6 +55,8 @@ Future<bool> joinLobby(BuildContext context, Character character, String lobbyID
     'lobbyID': lobbyID,
     'monster': false,
     'selected': false,
+    'currentHP': character.currentHP,
+    'maxHP': character.maxHP,
   };
 
   try {
@@ -134,6 +136,40 @@ Future<void> addSelectedInit(BuildContext context, String id) async {
   try {
     await FirebaseFirestore.instance.collection('characters').doc(id).update(
         {'selected': true});
+  }
+  catch (e) {
+    log(e.toString());
+  }
+}
+
+Future<void> takeDamageCharacter(BuildContext context, DocumentSnapshot doc) async {
+  int current = doc['currentHP'];
+  int newCurrent = current - 1;
+  if (newCurrent < 0) {
+    newCurrent = 0;
+  }
+
+  try {
+    await FirebaseFirestore.instance.collection('characters').doc(doc.id).update({
+      'currentHP': newCurrent
+    });
+  }
+  catch (e) {
+    log(e.toString());
+  }
+}
+
+Future<void> takeHealingCharacter(BuildContext context, DocumentSnapshot doc) async {
+  int current = doc['currentHP'];
+  int newCurrent = current + 1;
+  if (newCurrent > doc['maxHP']) {
+    newCurrent = doc['maxHP'];
+  }
+
+  try {
+    await FirebaseFirestore.instance.collection('characters').doc(doc.id).update({
+      'currentHP': newCurrent
+    });
   }
   catch (e) {
     log(e.toString());
