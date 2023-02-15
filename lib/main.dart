@@ -26,6 +26,11 @@ void main() async {
   await Hive.openBox('theme');
   characterBox = Hive.box('character');
   themeBox = Hive.box('theme');
+  //Set the theme from hive box if there's a colour stored
+  if (themeBox.isNotEmpty) {
+    log('Found theme to set!');
+    widgetBackground = themeBox.getAt(0);
+  }
 
   runApp(const MyApp());
 }
@@ -40,11 +45,6 @@ class MyApp extends StatelessWidget {
     //_____________________________
     //imageCache.clear();
     //_____________________________
-    //Set the theme from hive box if there's a colour stored
-    if (themeBox.isNotEmpty) {
-      log('Found theme to set!');
-      widgetBackground = themeBox.getAt(0);
-    }
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(

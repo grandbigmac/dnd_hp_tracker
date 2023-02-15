@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="harry.tools.dndhp.dnd_hp_tracker">
    <application
-        android:label="dnd_hp_tracker"
+        android:label="DungeonTracker"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
