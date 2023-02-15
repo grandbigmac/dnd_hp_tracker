@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dnd_hp_tracker/resources/tools.dart';
 import 'package:flutter/cupertino.dart';
 
+import '../models/character.dart';
 import '../models/lobby.dart';
 
 Future<bool> postLobby(BuildContext context, Lobby lobby) async {
@@ -38,4 +39,22 @@ Future<void> disposeLobby(BuildContext context) async {
   catch (e) {
     log('Failed to delete lobby');
   }
+}
+
+Future<bool> joinLobby(BuildContext context, Character character) async {
+  //POST CHARACTER STATS TO CHARACTERS COLLECTION
+  bool success = false;
+  var id = await getDeviceId();
+  var data = <String, dynamic>{
+    'name': character.name,
+  };
+
+  try {
+    await FirebaseFirestore.instance.collection('characters').doc(id).set(data);
+  }
+  catch (e) {
+    log('Failed to join lobby.');
+  }
+
+  return success;
 }
