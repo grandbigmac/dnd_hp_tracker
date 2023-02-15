@@ -202,6 +202,14 @@ class _LobbyPageState extends State<LobbyPage> with SingleTickerProviderStateMix
     });
   }
 
+  void _showTurnSnackBar(bool selected, bool matching) {
+    if (selected && matching) {
+      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+        notification(context, 'It\'s your character\'s turn!');
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
 
@@ -220,6 +228,9 @@ class _LobbyPageState extends State<LobbyPage> with SingleTickerProviderStateMix
       //Add a 'selected' field to each character
       //If selIndex == characterIndex, update its selected field
       //On changing initiative, find the character with selected = true and change it to false
+
+      //If it's your character, display a snack bar saying that
+      _showTurnSnackBar(doc['selected'], widget.id == doc.id);
 
       return Padding(
         padding: const EdgeInsets.all(8.0),
@@ -354,22 +365,26 @@ class _LobbyPageState extends State<LobbyPage> with SingleTickerProviderStateMix
                   ]
                 ),
                 const Spacer(),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    const SizedBox(width: 12.0),
-                    yourChar? takeHealing() : Container(),
-                    const SizedBox(width: 12.0),
-                    Column(
-                        children: [
-                          Icon(Icons.favorite, color: widgetTextColour,),
-                          Text(doc['currentHP'].toString(), style: widgetContent,),
-                        ]
-                    ),
-                    const SizedBox(width: 12.0),
-                    yourChar? takeDamage() : Container(),
-                    const SizedBox(width: 12.0),
-                  ],
+                Container(
+                  width: 150,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const SizedBox(width: 12.0),
+                      yourChar? takeHealing() : Container(),
+                      const SizedBox(width: 12.0),
+                      Column(
+                          children: [
+                            Icon(Icons.favorite, color: widgetTextColour,),
+                            Text(doc['currentHP'].toString(), style: widgetContent,),
+                          ]
+                      ),
+                      const SizedBox(width: 12.0),
+                      yourChar? takeDamage() : Container(),
+                      const SizedBox(width: 12.0),
+                    ],
+                  ),
                 )
               ]
           ),
@@ -391,7 +406,10 @@ class _LobbyPageState extends State<LobbyPage> with SingleTickerProviderStateMix
       return IgnorePointer(
         ignoring: option? false : true,
         child: Column(
-          children: characterBlocks,
+          children: characterBlocks.isNotEmpty? characterBlocks : [
+            Text('Health Tracker Empty!', style: widgetTitle,),
+            Text('Invite players to your lobby to track their health points!', textAlign: TextAlign.center, style: widgetContent),
+          ],
         )
       );
     }
@@ -459,6 +477,10 @@ class _LobbyPageState extends State<LobbyPage> with SingleTickerProviderStateMix
             const SizedBox(width: 12.0,),
             InkWell(
               onTap: () async {
+                if(characterTotal == 0) {
+                  notification(context, 'No characters in the lobby!');
+                  return;
+                }
                 int newIndex = selIndex + 1;
                 if (newIndex == characterTotal || newIndex > characterTotal) {
                   newIndex = 0;
@@ -542,62 +564,6 @@ class _LobbyPageState extends State<LobbyPage> with SingleTickerProviderStateMix
                 )
               ],
             ),
-          ],
-        ),
-      );
-    }
-
-    Widget lobbyDetails() {
-      return Container(
-        width: MediaQuery.of(context).size.width,
-        padding: const EdgeInsets.all(24.0),
-        decoration: BoxDecoration(
-            borderRadius: const BorderRadius.all(Radius.circular(24.0)),
-            gradient: redBlockContainer,
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey.withOpacity(0.5),
-                spreadRadius: 5,
-                blurRadius: 9,
-                offset: const Offset(0, 3),
-              )
-            ]
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Flexible(
-              flex: 1,
-              child: Column(
-                children: [
-                  getIconContainer(widget.lobby.iconIndex, false, false, landscapeIcons),
-                  const SizedBox(height: 12.0),
-                  Text(widget.lobby.code.toString(), style: widgetTitle,),
-                ],
-              )
-            ),
-            Flexible(
-              flex: 2,
-              child: Padding(
-                padding: const EdgeInsets.only(left: 12.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(widget.lobby.name, style: widgetTitle,),
-                    const SizedBox(height: 12.0),
-                    Container(
-                      height: 100,
-                      child: ListView(
-                        children: [
-                          Text(widget.lobby.description, style: lobbyDescription,),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: 12.0),
-                  ],
-                ),
-              ),
-            )
           ],
         ),
       );
