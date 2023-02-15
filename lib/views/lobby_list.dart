@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'dart:math' as m;
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dnd_hp_tracker/models/lobby.dart';
 import 'package:dnd_hp_tracker/resources/boxes.dart';
 import 'package:dnd_hp_tracker/resources/images.dart';
 import 'package:dnd_hp_tracker/resources/tools.dart';
@@ -10,8 +11,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:page_transition/page_transition.dart';
 
+import '../controllers/create_lobby.dart';
+import '../models/character.dart';
 import '../styles/colours.dart';
 import '../styles/textstyles.dart';
+import 'lobby_page.dart';
 
 class LobbyList extends StatefulWidget {
   LobbyList({super.key, required this.selectedCharIndex});
@@ -132,7 +136,39 @@ class _LobbyListState extends State<LobbyList> with SingleTickerProviderStateMix
                                         log('Success!');
                                         log('Character: ${characterBox.getAt(widget.selectedCharIndex).name}');
                                         loadingDialog(context);
-                                        Navigator.pop(context);
+                                        //Join the lobby
+                                        //Post character to firestore
+                                        //Navigate to lobby page if posting is successful
+                                        Character char = characterBox.getAt(widget.selectedCharIndex);
+                                        Lobby lobby = Lobby(
+                                            name: doc['name'],
+                                            description: doc['description'],
+                                            iconIndex: doc['iconIndex'],
+                                            turnIndex: doc['turnIndex'],
+                                            code: doc['code'],
+                                            id: doc.id,
+                                        );
+
+                                        var devID = await getDeviceId();
+
+                                        bool success = await joinLobby(context, char, doc.id);
+                                        if (success) {
+                                          Navigator.pop(context);
+                                          log('Successful');
+                                          Navigator.push(
+                                            context,
+                                            PageTransition(
+                                              type: PageTransitionType.leftToRightWithFade,
+                                              alignment: Alignment.topCenter,
+                                              child: LobbyPage(lobby: lobby, id: devID!, monIndex: 0),
+                                            ),
+                                          );
+                                        }
+                                        else {
+                                          Navigator.pop(context);
+                                          notification(contextM, 'Failed joining lobby! Please try again.');
+                                          return;
+                                        }
                                       }
                                       else {
                                         notification(contextM, 'Lobby code incorrect!');

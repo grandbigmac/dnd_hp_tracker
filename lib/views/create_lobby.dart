@@ -214,19 +214,21 @@ class _CreateLobbyState extends State<CreateLobby> with TickerProviderStateMixin
                             name: encounterName.text,
                             description: encounterDescription.text,
                             iconIndex: widget.iconIndex,
+                            turnIndex: 0,
                             code: widget.lobbyID,
                             id: id!,
-                            characters: []
                         );
                         bool result = await postLobby(context, lobby);
 
                         if (result) {
+                          var rng = m.Random();
+                          int monIconIndex = rng.nextInt(monsterIcons.length);
                           Navigator.push(
                             context,
                             PageTransition(
                               type: PageTransitionType.leftToRightWithFade,
                               alignment: Alignment.topCenter,
-                              child: LobbyPage(lobby: lobby, id: id,),
+                              child: LobbyPage(lobby: lobby, id: id, monIndex: monIconIndex),
                             ),
                           );
                         }

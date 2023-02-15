@@ -27,3 +27,12 @@ List landscapeIcons = [
   const AssetImage('assets/images/landscapes/misty.PNG'),
   const AssetImage('assets/images/landscapes/mountain.PNG'),
 ];
+
+List monsterIcons = [
+  const AssetImage('assets/images/landscapes/bridge.PNG'),
+  const AssetImage('assets/images/landscapes/canyon.PNG'),
+  const AssetImage('assets/images/landscapes/castle.PNG'),
+  const AssetImage('assets/images/landscapes/castle2.PNG'),
+  const AssetImage('assets/images/landscapes/misty.PNG'),
+  const AssetImage('assets/images/landscapes/mountain.PNG'),
+];

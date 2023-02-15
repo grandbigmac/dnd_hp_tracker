@@ -32,6 +32,10 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    //Call this when you change an image
+    //_____________________________
+    //imageCache.clear();
+    //_____________________________
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
