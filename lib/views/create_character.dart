@@ -121,7 +121,7 @@ class _CreateCharacterState extends State<CreateCharacter> with TickerProviderSt
             );
 
             return Container(
-              color: widgetBackgroundRed,
+              color: widgetBackground,
               child: Padding(
                 padding: const EdgeInsets.all(0),
                 child: Column(
@@ -166,7 +166,7 @@ class _CreateCharacterState extends State<CreateCharacter> with TickerProviderSt
     showModalBottomSheet<void>(isDismissible: false, enableDrag: false, context: context, builder: (BuildContext context) {
       return Container(
         height: 300,
-        color: widgetBackgroundRed,
+        color: widgetBackground,
         child: Padding(
           padding: const EdgeInsets.all(0),
           child: Column(
@@ -276,7 +276,7 @@ class _CreateCharacterState extends State<CreateCharacter> with TickerProviderSt
             Text('Character Class', style: widgetContent,),
             Container(
               child: DropdownButtonFormField<String>(
-                dropdownColor: widgetBackgroundRed,
+                dropdownColor: widgetBackground,
                 style: widgetContent,
                 menuMaxHeight: 200,
                 value: selectedClass,
@@ -299,7 +299,7 @@ class _CreateCharacterState extends State<CreateCharacter> with TickerProviderSt
           children: [
             Text('Initiative', style: widgetContent,),
             DropdownButtonFormField<int>(
-                dropdownColor: widgetBackgroundRed,
+                dropdownColor: widgetBackground,
                 style: widgetContent,
                 isExpanded: true,
                 items: initiatives(),
@@ -366,7 +366,7 @@ class _CreateCharacterState extends State<CreateCharacter> with TickerProviderSt
         padding: const EdgeInsets.all(24.0),
         decoration: BoxDecoration(
             borderRadius: const BorderRadius.all(Radius.circular(24.0)),
-            gradient: redBlockContainer,
+            gradient: blockContainerGradient,
             boxShadow: [
               BoxShadow(
                 color: Colors.grey.withOpacity(0.5),
@@ -408,9 +408,9 @@ class _CreateCharacterState extends State<CreateCharacter> with TickerProviderSt
         child: ListView(
           shrinkWrap: true,
           children: [
-            blockContainer(context, 'Create Character', 'Creating a character is easy, just fill in the following fields and you\'ll be ready for any encounter!', redBlockContainer),
+            blockContainer(context, 'Create Character', 'Creating a character is easy, just fill in the following fields and you\'ll be ready for any encounter!', blockContainerGradient),
             const SizedBox(height: 12.0),
-            blockContainerCustomContent(context, ccHeader(), redBlockContainer),
+            blockContainerCustomContent(context, ccHeader(), blockContainerGradient),
             const SizedBox(height: 12.0),
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -419,9 +419,9 @@ class _CreateCharacterState extends State<CreateCharacter> with TickerProviderSt
                   flex: 1,
                   child: Column(
                     children: [
-                      blockContainerCustomContent(context, chooseIcon(), redBlockContainer),
+                      blockContainerCustomContent(context, chooseIcon(), blockContainerGradient),
                       const SizedBox(height: 12.0),
-                      blockContainerCustomContent(context, chooseHP(), redBlockContainer),
+                      blockContainerCustomContent(context, chooseHP(), blockContainerGradient),
                     ],
                   ),
                 ),
@@ -430,7 +430,7 @@ class _CreateCharacterState extends State<CreateCharacter> with TickerProviderSt
                   flex: 1,
                   child: Column(
                     children: [
-                      blockContainerCustomContent(context, chooseInitiative(), redBlockContainer),
+                      blockContainerCustomContent(context, chooseInitiative(), blockContainerGradient),
                       const SizedBox(height: 12.0),
                       continueWidget(),
                     ],

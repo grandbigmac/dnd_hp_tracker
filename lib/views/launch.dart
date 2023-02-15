@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'dart:math' as m;
 import 'package:dnd_hp_tracker/resources/boxes.dart';
 import 'package:dnd_hp_tracker/resources/images.dart';
+import 'package:dnd_hp_tracker/resources/theme_drawer.dart';
 import 'package:dnd_hp_tracker/resources/tools.dart';
 import 'package:dnd_hp_tracker/views/create_character.dart';
 import 'package:dnd_hp_tracker/views/create_lobby.dart';
@@ -35,7 +36,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
       context: context,
       barrierDismissible: false,
       builder: (context) => AlertDialog(
-        backgroundColor: widgetBackgroundRed,
+        backgroundColor: widgetBackground,
         title: Text('Are you sure?', style: widgetTitle,),
         content: Text('Are you sure you\'d like to delete ${characterBox.getAt(index).name}?', style: widgetContent,),
         actions: [
@@ -70,7 +71,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     showModalBottomSheet<void>(context: context, builder: (BuildContext context) {
       return Container(
         height: 300,
-        color: widgetBackgroundRed,
+        color: widgetBackground,
         child: Padding(
             padding: const EdgeInsets.all(0),
             child: Column(
@@ -201,7 +202,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
         padding: const EdgeInsets.all(12.0),
         decoration: BoxDecoration(
             borderRadius: const BorderRadius.all(Radius.circular(24.0)),
-            gradient: redBlockContainer,
+            gradient: blockContainerGradient,
             boxShadow: [
               BoxShadow(
                 color: Colors.grey.withOpacity(0.5),
@@ -232,6 +233,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
         backgroundColor: headerColour,
         title: const Text('Home'),
       ),
+      drawer: drawer(context),
       bottomNavigationBar: bottomBar(),
       backgroundColor: backgroundColour,
       resizeToAvoidBottomInset: true,
@@ -256,7 +258,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                           ),
                         );
                       },
-                      child: blockContainer(context, 'Join Lobby', 'Join combat lobbies and track your teammates\' HP!', redBlockContainer)),
+                      child: blockContainer(context, 'Join Lobby', 'Join combat lobbies and track your teammates\' HP!', blockContainerGradient)),
                   ),
                   const SizedBox(width: 12.0),
                   Flexible(
@@ -273,7 +275,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                           ),
                         );
                       },
-                      child: blockContainer(context, 'Host Lobby', 'Create a lobby for your combat session to track your teammate\'s HP.', redBlockContainer)),
+                      child: blockContainer(context, 'Host Lobby', 'Create a lobby for your combat session to track your teammate\'s HP.', blockContainerGradient)),
                   )
                 ]
             ),
@@ -293,7 +295,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                   ),
                 );
               },
-              child: blockContainer(context, 'Create a Character', 'Set your character\'s name and HP to use in combat lobbies!', redBlockContainer),
+              child: blockContainer(context, 'Create a Character', 'Set your character\'s name and HP to use in combat lobbies!', blockContainerGradient),
             ),
           ],
         ),

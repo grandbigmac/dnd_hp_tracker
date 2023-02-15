@@ -71,7 +71,7 @@ Container getIconContainer(int index, bool big, bool selected, List<dynamic> lis
             offset: const Offset(0, 3),
           )
         ],
-        border: Border.all(color: selected? Colors.orange : widgetBackgroundRed, width: 5.0),
+        border: Border.all(color: selected? Colors.orange : widgetBackground, width: 5.0),
         borderRadius: BorderRadius.circular(125),
         image: DecorationImage(
           image: list[index],
@@ -96,7 +96,7 @@ Container getHomePageCharacterIcon(int index, bool selected) {
             offset: const Offset(0, 3),
           )
         ],
-        border: Border.all(color: selected? Colors.orange : widgetBackgroundRed, width: 5.0),
+        border: Border.all(color: selected? Colors.orange : widgetBackground, width: 5.0),
         borderRadius: BorderRadius.circular(125),
         image: DecorationImage(
           image: characterIcons[index],
@@ -121,7 +121,7 @@ Container getIconContainerSmall(int index, bool selected, List<dynamic> list) {
             offset: const Offset(0, 3),
           )
         ],
-        border: Border.all(color: selected? Colors.orange : widgetBackgroundRed, width: 1.0),
+        border: Border.all(color: selected? Colors.orange : widgetBackground, width: 1.0),
         borderRadius: BorderRadius.circular(125),
         image: DecorationImage(
           image: list[index],

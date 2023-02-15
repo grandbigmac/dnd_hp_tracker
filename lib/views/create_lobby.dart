@@ -115,7 +115,7 @@ class _CreateLobbyState extends State<CreateLobby> with TickerProviderStateMixin
             );
 
             return Container(
-              color: widgetBackgroundRed,
+              color: widgetBackground,
               child: Padding(
                 padding: const EdgeInsets.all(0),
                 child: Column(
@@ -155,7 +155,7 @@ class _CreateLobbyState extends State<CreateLobby> with TickerProviderStateMixin
     showModalBottomSheet<void>(isDismissible: false, enableDrag: false, context: context, builder: (BuildContext context) {
       return Container(
         height: 300,
-        color: widgetBackgroundRed,
+        color: widgetBackground,
         child: Padding(
             padding: const EdgeInsets.all(0),
             child: Column(
@@ -255,7 +255,7 @@ class _CreateLobbyState extends State<CreateLobby> with TickerProviderStateMixin
           padding: const EdgeInsets.all(24.0),
           decoration: BoxDecoration(
               borderRadius: const BorderRadius.all(Radius.circular(24.0)),
-              gradient: redBlockContainer,
+              gradient: blockContainerGradient,
               boxShadow: [
                 BoxShadow(
                   color: Colors.grey.withOpacity(0.5),
@@ -324,7 +324,7 @@ class _CreateLobbyState extends State<CreateLobby> with TickerProviderStateMixin
               controller: encounterName,
               style: widgetContent,
               decoration: InputDecoration(
-                focusColor: widgetBackgroundRed,
+                focusColor: widgetBackground,
               ),
             ),
             const SizedBox(height: 12.0),
@@ -368,16 +368,16 @@ class _CreateLobbyState extends State<CreateLobby> with TickerProviderStateMixin
         child: ListView(
           shrinkWrap: true,
           children: [
-            blockContainer(context, 'Create Lobby', 'To create a new lobby for your combat encounter, please enter the following details:', redBlockContainer),
+            blockContainer(context, 'Create Lobby', 'To create a new lobby for your combat encounter, please enter the following details:', blockContainerGradient),
             const SizedBox(height: 12.0),
-            blockContainerCustomContent(context, registerContent(), redBlockContainer),
+            blockContainerCustomContent(context, registerContent(), blockContainerGradient),
             const SizedBox(height: 12.0),
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Flexible(
                   flex: 1,
-                  child: blockContainerCustomContent(context, chooseIcon(), redBlockContainer),
+                  child: blockContainerCustomContent(context, chooseIcon(), blockContainerGradient),
                 ),
                 const SizedBox(width: 12.0),
                 Flexible(
@@ -386,7 +386,7 @@ class _CreateLobbyState extends State<CreateLobby> with TickerProviderStateMixin
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      blockContainerCustomContent(context, lobbyPassword(), redBlockContainer),
+                      blockContainerCustomContent(context, lobbyPassword(), blockContainerGradient),
                       const SizedBox(height: 12.0),
                       continueWidget()
                     ],

@@ -100,7 +100,7 @@ class _LobbyPageState extends State<LobbyPage> with SingleTickerProviderStateMix
               );
 
               return Container(
-                color: widgetBackgroundRed,
+                color: widgetBackground,
                 child: Padding(
                   padding: const EdgeInsets.all(0),
                   child: Column(
@@ -133,7 +133,7 @@ class _LobbyPageState extends State<LobbyPage> with SingleTickerProviderStateMix
                           controller: monNameController,
                           style: widgetContent,
                           decoration: InputDecoration(
-                            focusColor: widgetBackgroundRed,
+                            focusColor: widgetBackground,
                           ),
                         ),
                       ),
@@ -150,7 +150,7 @@ class _LobbyPageState extends State<LobbyPage> with SingleTickerProviderStateMix
                           controller: monTypeController,
                           style: widgetContent,
                           decoration: InputDecoration(
-                            focusColor: widgetBackgroundRed,
+                            focusColor: widgetBackground,
                           ),
                         ),
                       ),
@@ -161,7 +161,7 @@ class _LobbyPageState extends State<LobbyPage> with SingleTickerProviderStateMix
                       Container(
                         width: MediaQuery.of(context).size.width * 0.3,
                         child: DropdownButtonFormField<int>(
-                            dropdownColor: widgetBackgroundRed,
+                            dropdownColor: widgetBackground,
                             style: widgetContent,
                             isExpanded: true,
                             items: initiatives(),
@@ -264,7 +264,7 @@ class _LobbyPageState extends State<LobbyPage> with SingleTickerProviderStateMix
           padding: const EdgeInsets.all(24.0),
           decoration: BoxDecoration(
               borderRadius: const BorderRadius.all(Radius.circular(24.0)),
-              color: doc['selected'] ? widgetBackgroundRedDark : widgetBackgroundRed,
+              color: doc['selected'] ? widgetBackgroundRedDark : widgetBackground,
               boxShadow: [
                 BoxShadow(
                   color: Colors.grey.withOpacity(0.5),
@@ -310,7 +310,7 @@ class _LobbyPageState extends State<LobbyPage> with SingleTickerProviderStateMix
           stream: FirebaseFirestore.instance.collection('characters').where('lobbyID', isEqualTo: widget.lobby.id).orderBy('initiative', descending: true).snapshots(),
           builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
             if (!snapshot.hasData) {
-              return blockContainer(context, 'No characters found!', '', redBlockContainer);
+              return blockContainer(context, 'No characters found!', '', blockContainerGradient);
             }
             else {
               return ListView.builder(
@@ -344,7 +344,7 @@ class _LobbyPageState extends State<LobbyPage> with SingleTickerProviderStateMix
     }
 
     Widget characterHealthCard(DocumentSnapshot doc) {
-      bool yourChar = doc.id == widget.lobby.id;
+      bool yourChar = doc.id == widget.id;
       log('My Device ID: ${widget.id}');
       log('My Lobby DocID: ${widget.lobby.id}');
 
@@ -451,7 +451,7 @@ class _LobbyPageState extends State<LobbyPage> with SingleTickerProviderStateMix
               duration: animDur, opacity: option? 1.0 : 0.0,
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: blockContainerCustomContent(context, healthTracker(), redBlockContainer),
+                child: blockContainerCustomContent(context, healthTracker(), blockContainerGradient),
               )),
         ],
       );
@@ -465,7 +465,7 @@ class _LobbyPageState extends State<LobbyPage> with SingleTickerProviderStateMix
         padding: const EdgeInsets.all(24.0),
         decoration: BoxDecoration(
             borderRadius: const BorderRadius.all(Radius.circular(24.0)),
-            gradient: redBlockContainer,
+            gradient: blockContainerGradient,
             boxShadow: [
               BoxShadow(
                 color: Colors.grey.withOpacity(0.5),
@@ -544,7 +544,7 @@ class _LobbyPageState extends State<LobbyPage> with SingleTickerProviderStateMix
         padding: const EdgeInsets.all(12.0),
         decoration: BoxDecoration(
             borderRadius: const BorderRadius.all(Radius.circular(24.0)),
-            gradient: redBlockContainer,
+            gradient: blockContainerGradient,
             boxShadow: [
               BoxShadow(
                 color: Colors.grey.withOpacity(0.5),
@@ -611,7 +611,7 @@ class _LobbyPageState extends State<LobbyPage> with SingleTickerProviderStateMix
                   option = false;
                 });
               },
-              child: Icon(Icons.bolt, color: widgetBackgroundRed, size: 25, shadows: option ? <Shadow>[const Shadow(color: Colors.white, blurRadius: 15.0)] : <Shadow>[Shadow(color: widgetBackgroundRedDark, blurRadius: 15.0)],),
+              child: Icon(Icons.bolt, color: widgetBackground, size: 25, shadows: option ? <Shadow>[const Shadow(color: Colors.white, blurRadius: 15.0)] : <Shadow>[Shadow(color: widgetBackgroundRedDark, blurRadius: 15.0)],),
             ),
             InkWell(
               onTap: () {
@@ -619,7 +619,7 @@ class _LobbyPageState extends State<LobbyPage> with SingleTickerProviderStateMix
                   option = true;
                 });
               },
-              child: Icon(Icons.favorite, color: widgetBackgroundRed, size: 25, shadows: option ? <Shadow>[Shadow(color: widgetBackgroundRedDark, blurRadius: 15.0)] : <Shadow>[const Shadow(color: Colors.white, blurRadius: 15.0)],),
+              child: Icon(Icons.favorite, color: widgetBackground, size: 25, shadows: option ? <Shadow>[Shadow(color: widgetBackgroundRedDark, blurRadius: 15.0)] : <Shadow>[const Shadow(color: Colors.white, blurRadius: 15.0)],),
             ),
           ],
         ),

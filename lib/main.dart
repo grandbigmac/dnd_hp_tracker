@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dnd_hp_tracker/models/character.dart';
 import 'package:dnd_hp_tracker/resources/boxes.dart';
 import 'package:dnd_hp_tracker/styles/colours.dart';
@@ -21,7 +23,9 @@ void main() async {
   Hive.registerAdapter(CharacterAdapter());
   await Hive.openBox('character');
   await Hive.openBox('temp');
+  await Hive.openBox('theme');
   characterBox = Hive.box('character');
+  themeBox = Hive.box('theme');
 
   runApp(const MyApp());
 }
@@ -36,6 +40,11 @@ class MyApp extends StatelessWidget {
     //_____________________________
     //imageCache.clear();
     //_____________________________
+    //Set the theme from hive box if there's a colour stored
+    if (themeBox.isNotEmpty) {
+      log('Found theme to set!');
+      widgetBackground = themeBox.getAt(0);
+    }
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(

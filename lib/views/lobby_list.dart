@@ -86,7 +86,7 @@ class _LobbyListState extends State<LobbyList> with SingleTickerProviderStateMix
             return Scaffold(
               body: Container(
                 height: MediaQuery.of(context).size.height,
-                color: widgetBackgroundRed,
+                color: widgetBackground,
                 child: Padding(
                   padding: const EdgeInsets.all(0),
                   child: Column(
@@ -112,7 +112,7 @@ class _LobbyListState extends State<LobbyList> with SingleTickerProviderStateMix
                                   controller: lobbyIdController,
                                   style: widgetContent,
                                   decoration: InputDecoration(
-                                    focusColor: widgetBackgroundRed,
+                                    focusColor: widgetBackground,
                                   ),
                                 ),
                               ),
@@ -202,7 +202,7 @@ class _LobbyListState extends State<LobbyList> with SingleTickerProviderStateMix
           padding: const EdgeInsets.all(24.0),
           decoration: BoxDecoration(
               borderRadius: const BorderRadius.all(Radius.circular(24.0)),
-              color: widgetBackgroundRed,
+              color: widgetBackground,
               boxShadow: [
                 BoxShadow(
                   color: Colors.grey.withOpacity(0.5),
@@ -257,7 +257,7 @@ class _LobbyListState extends State<LobbyList> with SingleTickerProviderStateMix
           stream: FirebaseFirestore.instance.collection('lobbies').snapshots(),
           builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
             if (!snapshot.hasData) {
-              return blockContainer(context, 'No lobbies found!', '', redBlockContainer);
+              return blockContainer(context, 'No lobbies found!', '', blockContainerGradient);
             }
             else {
               return ListView.builder(
@@ -281,7 +281,7 @@ class _LobbyListState extends State<LobbyList> with SingleTickerProviderStateMix
     }
 
     Widget listHeader() {
-      return blockContainer(context, 'Join a Lobby', 'Select a lobby to join using the correct lobby code.', redBlockContainer);
+      return blockContainer(context, 'Join a Lobby', 'Select a lobby to join using the correct lobby code.', blockContainerGradient);
     }
 
     return Scaffold(
